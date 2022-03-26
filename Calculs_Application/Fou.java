@@ -13,7 +13,7 @@ public class Fou extends Piece {
 			img = "images/fouB.png";
 		else
 			img = "images/fouN.png";
-		bouton = new MonSuperBouton(img);
+		bouton = new MonSuperBouton(img, placement[0], placement[1]);
 	}
 
 	public LinkedList<int[]> deplacement(Plateau p) {

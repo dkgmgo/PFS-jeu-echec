@@ -13,6 +13,10 @@ public abstract class Piece {
 			this.placement = p;
 	}
 
+	public int[] getPlacement() {
+		return placement;
+	}
+
 	public abstract LinkedList<int[]> deplacement(Plateau p);
 
 	public abstract int getValeur();

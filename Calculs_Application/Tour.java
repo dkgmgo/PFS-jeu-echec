@@ -13,7 +13,7 @@ public class Tour extends Piece {
 			img = "images/tourB.png";
 		else
 			img = "images/tourN.png";
-		bouton = new MonSuperBouton(img); 
+		bouton = new MonSuperBouton(img, placement[0], placement[1]); 
 	}
 
 	public LinkedList<int[]> deplacement(Plateau p) {

@@ -13,7 +13,7 @@ public class Cavalier extends Piece {
 			img = "images/cavalierB.png";
 		else
 			img = "images/cavalierN.png";
-		bouton = new MonSuperBouton(img);
+		bouton = new MonSuperBouton(img, placement[0], placement[1]);
 	}
 
 	/*

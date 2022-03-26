@@ -13,7 +13,7 @@ public class Roi extends Piece {
 			img = "images/roiB.png";
 		else
 			img = "images/roiN.png";
-		bouton = new MonSuperBouton(img);
+		bouton = new MonSuperBouton(img, placement[0], placement[1]);
 	}
 
 	/*
