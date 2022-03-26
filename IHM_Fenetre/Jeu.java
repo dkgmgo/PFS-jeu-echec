@@ -35,7 +35,7 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		this.setLocation(300, 50);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		timer = new Timer(1000, this);
+		timer = new Timer(100, this);
 
 		// initialisation du plateau
 		plateauDeJeu = new Plateau();
@@ -110,7 +110,7 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == timer) {
 			cptTops++;
-			Dessin.redessinerPieces(plateauDeJeu);
+			Dessin.redessinerPieces(plateauDeJeu, echiquier);
 		}
 	}
 
