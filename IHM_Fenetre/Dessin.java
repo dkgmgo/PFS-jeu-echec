@@ -15,8 +15,8 @@ public class Dessin {
 	
 	public static void dessinnerPieces(Plateau p, JPanel e, MouseListener jeu) {
 
-		for (int i = 1; i < 8; i++) {
-			for (int j = 1; j < 8; j++) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				if (p.getPieces()[i][j] != null) {
 					p.getPieces()[i][j].getBouton().setBounds(i * 60, j * 60, 60, 60);
 					e.add(p.getPieces()[i][j].getBouton());
@@ -26,12 +26,12 @@ public class Dessin {
 		}
 	}
 	
-	public static void redessinerPieces(Plateau p, JPanel e) {
-		for (int i = 1; i < 8; i++) {
-			for (int j = 1; j < 8; j++) {
+	public static void redessinerPieces(Plateau p, JPanel e, MouseListener jeu) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				if (p.getPieces()[i][j] != null) {
 					p.getPieces()[i][j].getBouton().setBounds(p.getPieces()[i][j].getPlacement()[0] * 60, p.getPieces()[i][j].getPlacement()[1] * 60, 60, 60);
-					e.add(p.getPieces()[i][j].getBouton());
+					e.add(p.getPieces()[i][j].getBouton()).addMouseListener(jeu);
 					p.getPieces()[i][j].getBouton().repaint();
 				}		
 			}

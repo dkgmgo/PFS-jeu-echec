@@ -25,11 +25,12 @@ public class MonSuperPanneau extends JPanel {
 		p = j.getPlateauDeJeu();
 	}
 
-	public MonSuperPanneau(int TAILLE_FENETRE) {
+	public MonSuperPanneau(int TAILLE_FENETRE, Jeu j) {
 		super();
 		this.setLayout(null);
 		this.setBounds((TAILLE_FENETRE - 480) / 2, (TAILLE_FENETRE - 480) / 2, 480, 480);
 		this.setBackground(null);
+		p = j.getPlateauDeJeu();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -38,7 +39,7 @@ public class MonSuperPanneau extends JPanel {
 			g.drawImage(image, 0, 0, this);
 		}
 		else {
-			for (int i = 0; i < 8; i++) {
+			for (int i = 0; i < 8; i++) { 
 				for (int j = 0; j < 8; j++) {
 					if ((i + j) % 2 != 0) {
 						g.setColor(Color.darkGray);

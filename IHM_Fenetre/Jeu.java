@@ -23,13 +23,16 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 	private JLabel pseudo2;
 	private JLabel temps1;
 	private JLabel temps2;
+	private int temps1s;
+	private int temps2s;
 	private JButton time1;
 	private JButton time2;
 	private Timer timer;
 	private int cptTops = 0;
+	private int seconde = 0;
 
 	// Constructeur
-	public Jeu() {
+	public Jeu(String nom1, String nom2, int temps) {
 		this.setTitle("Jeu d'Echec");
 		this.setSize(TAILLE_FENETRE, TAILLE_FENETRE);
 		this.setLocation(300, 50);
@@ -39,6 +42,8 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 
 		// initialisation du plateau
 		plateauDeJeu = new Plateau();
+		temps1s = temps;
+		temps2s = temps;
 
 		// les panneaux
 		// principal
@@ -68,11 +73,11 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		// droite
 
 		// joueurs ce code peut etre simplifié avec de smethodes static dans dessin
-		pseudo1 = new JLabel("joueur 1");
+		pseudo1 = new JLabel(nom1);
 		pseudo1.setBounds(0, 85, 100, 20);
 		haut.add(pseudo1);
 
-		pseudo2 = new JLabel("joueur 2");
+		pseudo2 = new JLabel(nom2);
 		pseudo2.setBounds(0, 0, 100, 20);
 		bas.add(pseudo2);
 
@@ -110,21 +115,29 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == timer) {
 			cptTops++;
-			Dessin.redessinerPieces(plateauDeJeu, echiquier);
+			Dessin.redessinerPieces(plateauDeJeu, echiquier, this);
+			if (cptTops == 10) {
+				seconde++;
+				System.out.println(seconde);
+				cptTops = 0;
+				temps1.setText(String.valueOf(temps1s - seconde));
+				temps2.setText(String.valueOf(temps2s - seconde));
+			}
 		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		int x = echiquier.getMousePosition().x;
-		int y = echiquier.getMousePosition().y;
-		plateauDeJeu.clicCase(x, y);
-		echiquier.repaint();
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		int x = echiquier.getMousePosition().x;
+		int y = echiquier.getMousePosition().y;
+		plateauDeJeu.clicCase(x, y);
+		echiquier.repaint();
+		// Dessin.redessinerPieces(plateauDeJeu, echiquier, this);
 
 	}
 

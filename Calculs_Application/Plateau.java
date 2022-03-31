@@ -17,7 +17,7 @@ public class Plateau {
 	 */
 	// test
 	public Plateau() {
-		pieces[2][2] = new Fou(false, new int[] { 2, 2 });
+		pieces[0][0] = new Fou(false, new int[] { 0, 0 });
 		pieces[4][2] = new Cavalier(false, new int[] { 4, 2 });
 		pieces[4][4] = new Tour(true, new int[] { 4, 4 });
 		pieces[1][3] = new Pion(true, new int[] { 1, 3 });
@@ -77,8 +77,6 @@ public class Plateau {
 				if (dest[0] == caseSelectionnee[0] && (dest[1] == caseSelectionnee[1])) {
 					System.out.println("ok");
 					bouger();
-					pieces[ligne][colonne].bouton.setImage(null);
-					pieces[ligne][colonne] = null;
 				}
 			}
 			destinationsValides.clear();
@@ -89,8 +87,6 @@ public class Plateau {
 			for (int[] dest : destinationsValides) {
 				if (dest[0] == caseSelectionnee[0] && (dest[1] == caseSelectionnee[1])) {
 					capturer();
-					pieces[ligne][colonne].bouton.setImage(null);
-					pieces[ligne][colonne] = null;
 				}
 			}
 			destinationsValides.clear();
@@ -137,13 +133,12 @@ public class Plateau {
 			pieces[caseSelectionnee[0]][caseSelectionnee[1]] = new Reine(p.couleur,
 					new int[] { caseSelectionnee[0], caseSelectionnee[1] });
 		}
+		pieces[ligne][colonne].bouton.setImage(null);
+		pieces[ligne][colonne] = null;
 	}
 
 	public void bouger() {
 		Piece p = pieces[ligne][colonne];
-		if(pieces[caseSelectionnee[0]][caseSelectionnee[1]]!=null) {
-			pieces[caseSelectionnee[0]][caseSelectionnee[1]].bouton.setImage(null);
-		}
 		if (p instanceof Fou) {
 			pieces[caseSelectionnee[0]][caseSelectionnee[1]] = new Fou(p.couleur,
 					new int[] { caseSelectionnee[0], caseSelectionnee[1] });
@@ -164,5 +159,8 @@ public class Plateau {
 			pieces[caseSelectionnee[0]][caseSelectionnee[1]] = new Reine(p.couleur,
 					new int[] { caseSelectionnee[0], caseSelectionnee[1] });
 		}
+
+		pieces[ligne][colonne].bouton.setImage(null);
+		pieces[ligne][colonne] = null;
 	}
 }

@@ -1,9 +1,8 @@
-import IHM_Fenetre.Jeu;
+import IHM_Fenetre.Selection;
 
 public class MainEchecs {
 
 	public static void main(String[] args) {
-		Jeu j = new Jeu(); 
+		Selection s1 = new Selection ();
 	}
-
 }
