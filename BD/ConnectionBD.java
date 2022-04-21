@@ -1,7 +1,4 @@
 package BD;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -27,8 +24,8 @@ public class ConnectionBD {
     	
     	try {
     		conn.connexion();
-    		conn.creerRequetesParametrees(new Joueur ("i", "m", 0, false)); //un exemple
-    		//conn.ecrireFichier("C:\\Users\\Mounir\\Desktop\\fichiers");
+    		conn.creerRequetesParametrees(); 
+    		conn.ajouterInfos(new Joueur ("cest", "moi", 0, false)); //un exemple
     	}
     	catch (Exception ex) {
     		System.out.println();
@@ -52,33 +49,32 @@ public class ConnectionBD {
             ex.printStackTrace(System.err);
             throw new Exception("Erreur dans la méthode connexionBD()");
         }
-
     }
     
-    public int creerRequetesParametrees(Joueur joueur) throws Exception {
+    public void creerRequetesParametrees() throws Exception {
+    	
         try {
-        	this.insertQuery = this.connection.prepareStatement("INSERT INTO echec VALUES (joueur.identifiant, joueur.mdp, joueur.score, joueur.tempsDeJeu)");
-        	System.out.println("Joueur "+joueur+" a été ajouté à la base");
-        	return this.insertQuery.executeUpdate(); 
+        	this.insertQuery = this.connection.prepareStatement("INSERT INTO echec (Pseudo, Mdp, Score) VALUES (?, ?, ?)");
         }
         catch (SQLException ex) {
             ex.printStackTrace(System.err);
             throw new Exception("Erreur dans la méthode creerRequetesParametrees()");
         }
     }
-
     
-    /*public void ecrireFichier(String cheminVersDossier) throws Exception {
-        try {
-        	String nomFichier = "donneesJoueur";
-            PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream (cheminVersDossier + "/" + nomFichier)));
-            writer.print("nom joueur 1 : ");
-            writer.close();
-        } 
-        catch (Exception ex) {
+    public int ajouterInfos (Joueur joueur) {
+    	
+    	try {
+	    	this.insertQuery.setString(1, joueur.identifiant);
+	    	this.insertQuery.setString(2, joueur.mdp);
+	    	this.insertQuery.setDouble(3, joueur.score);
+	    	System.out.println("Le joueur "+joueur.identifiant+"  a été ajouté à la base");
+	    	return this.insertQuery.executeUpdate();
+    	}
+    	catch (SQLException ex) {
             ex.printStackTrace(System.err);
-            throw new Exception("Erreur dans la méthode ecrireFichier()");
-        }
-    }*/
+            return -1;
+        }    	
+    }
 
 }
