@@ -32,6 +32,7 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 	private int cptTops2 = 0;
 	private int tempsEnSec = 0;
 	public boolean tour;
+	private Victoire finDePartie;
 	
 
 	// Constructeur
@@ -168,6 +169,14 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		int y = echiquier.getMousePosition().y;
 		plateauDeJeu.clicCase(x, y, tour);
 		echiquier.repaint();
+		if(plateauDeJeu.echecEtMat() == 1) {
+			finDePartie = new Victoire(2);
+			this.setVisible(false);
+		}
+		else if(plateauDeJeu.echecEtMat() == 2) {
+			finDePartie = new Victoire(1);
+			this.setVisible(false);
+		}
 	}
 
 	@Override

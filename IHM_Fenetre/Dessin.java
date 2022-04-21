@@ -76,12 +76,12 @@ public class Dessin {
 		}
 		
 		//dessin d'un roi en echec
-		if(p.roiEnEchec() != 0) {
+		if(p.roiEnEchec()[0] != 0) {
 			Color jauneTrans = new Color(255, 255, 0, 128);
 			g.setColor(jauneTrans);
-			if(p.roiEnEchec() == 1)
+			if(p.roiEnEchec()[0] == 1)
 				posR = p.getPosRoiAdverse(true);
-			else if(p.roiEnEchec() == 2)
+			else if(p.roiEnEchec()[0] == 2)
 				posR = p.getPosRoiAdverse(false);
 			g.fillRect(posR[0]*60, posR[1]*60, 60, 60);
 		}

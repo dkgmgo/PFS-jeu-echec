@@ -21,17 +21,17 @@ public class Plateau {
 	 * aucun parametres
 	 */
 	// test
-	
-	 /* public Plateau() { pieces[2][2] = new Fou(false, new int[] { 2, 2 });
-	  pieces[4][2] = new Cavalier(false, new int[] { 4, 2 }); pieces[4][4] = new
-	 Tour(true, new int[] { 4, 4 }); pieces[1][3] = new Pion(true, new int[] { 1,
-	  3 }); pieces[5][2] = new Reine(true, new int[] { 5, 2 }); pieces[4][3] = new
-	  Roi(false, new int[] { 4, 3 }); caseSelectionnee[0] = -1; caseSelectionnee[1]
-	  = -1; 
-	  	j1 = new Joueur("nom1", "mdp1", 0, true);
-		j2 = new Joueur("nom2", "mdp2", 0, false);
-	  }*/
-	 
+
+	/*
+	 * public Plateau() { pieces[2][2] = new Fou(false, new int[] { 2, 2 });
+	 * pieces[4][2] = new Cavalier(false, new int[] { 4, 2 }); pieces[4][4] = new
+	 * Tour(true, new int[] { 4, 4 }); pieces[1][3] = new Pion(true, new int[] { 1,
+	 * 3 }); pieces[5][2] = new Reine(true, new int[] { 5, 2 }); pieces[4][3] = new
+	 * Roi(false, new int[] { 4, 3 }); caseSelectionnee[0] = -1; caseSelectionnee[1]
+	 * = -1; j1 = new Joueur("nom1", "mdp1", 0, true); j2 = new Joueur("nom2",
+	 * "mdp2", 0, false); }
+	 */
+
 	// réel
 	public Plateau() {// tester grande boucle //pions
 		for (int i = 0; i < 8; i++) {
@@ -62,7 +62,7 @@ public class Plateau {
 		caseSelectionnee[0] = -1;
 		caseSelectionnee[1] = -1;
 
-		if(!gameWithAI)
+		if (!gameWithAI)
 			j1 = new Joueur("nom1", "mdp1", 0, true);
 		else
 			j1 = new MaSuperIA(this, true);
@@ -88,7 +88,8 @@ public class Plateau {
 	 * la reflexivité si ca bouge pas
 	 */
 	public void clicCase(int abs, int ord, boolean tour) {
-		if (caseSelectionnee[0] == -1 && caseSelectionnee[1] == -1 && pieces[abs / 60][ord / 60] != null && peutBouger(abs / 60, ord / 60, tour)) { // selection
+		if (caseSelectionnee[0] == -1 && caseSelectionnee[1] == -1 && pieces[abs / 60][ord / 60] != null
+				&& peutBouger(abs / 60, ord / 60, tour)) { // selection
 			caseSelectionnee = quelleCase(abs, ord);
 			ligne = quelleCase(abs, ord)[0];
 			colonne = quelleCase(abs, ord)[1];
@@ -146,11 +147,10 @@ public class Plateau {
 			pieces[caseSelectionnee[0]][caseSelectionnee[1]] = new Fou(p.couleur,
 					new int[] { caseSelectionnee[0], caseSelectionnee[1] });
 		} else if (p instanceof Pion) { // cas de la promotion inclu
-			if((p.couleur == false && caseSelectionnee[1] == 7) || (p.couleur == true && caseSelectionnee[1] == 0)) {
+			if ((p.couleur == false && caseSelectionnee[1] == 7) || (p.couleur == true && caseSelectionnee[1] == 0)) {
 				pieces[caseSelectionnee[0]][caseSelectionnee[1]] = new Reine(p.couleur,
 						new int[] { caseSelectionnee[0], caseSelectionnee[1] });
-			}
-			else {
+			} else {
 				pieces[caseSelectionnee[0]][caseSelectionnee[1]] = new Pion(p.couleur,
 						new int[] { caseSelectionnee[0], caseSelectionnee[1] });
 			}
@@ -183,11 +183,10 @@ public class Plateau {
 			pieces[caseSelectionnee[0]][caseSelectionnee[1]] = new Fou(p.couleur,
 					new int[] { caseSelectionnee[0], caseSelectionnee[1] });
 		} else if (p instanceof Pion) { // cas de la promotion inclu
-			if((p.couleur == false && caseSelectionnee[1] == 7) || (p.couleur == true && caseSelectionnee[1] == 0)) {
+			if ((p.couleur == false && caseSelectionnee[1] == 7) || (p.couleur == true && caseSelectionnee[1] == 0)) {
 				pieces[caseSelectionnee[0]][caseSelectionnee[1]] = new Reine(p.couleur,
 						new int[] { caseSelectionnee[0], caseSelectionnee[1] });
-			}
-			else {
+			} else {
 				pieces[caseSelectionnee[0]][caseSelectionnee[1]] = new Pion(p.couleur,
 						new int[] { caseSelectionnee[0], caseSelectionnee[1] });
 			}
@@ -209,45 +208,53 @@ public class Plateau {
 		pieces[ligne][colonne] = null;
 	}
 
-	public int roiEnEchec() {//renvoi 1 si le roi noir est en echec et 2 si c'est le roi blanc qui est en echec
-		int sortie = 0;
+	public int[] roiEnEchec() {// renvoi 1 si le roi noir est en echec et 2 si c'est le roi blanc qui est en
+								// echec et en plus on la position du joueur qui met le roi en echec
+		int[] sortie = new int[3];
+		sortie[0] = 0;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (pieces[i][j] != null) {
 					int[] pos = getPosRoiAdverse(pieces[i][j].couleur);
 					for (int[] dest : pieces[i][j].deplacement(this)) {
-						if(dest[0] == pos[0] && dest[1] == pos[1]) {
-							if(pieces[pos[0]][pos[1]].couleur)
-								sortie = 2;
+						if (dest[0] == pos[0] && dest[1] == pos[1]) {
+							if (pieces[pos[0]][pos[1]].couleur)
+								sortie[0] = 2;
 							else
-								sortie = 1;
+								sortie[0] = 1;
+							sortie[1] = pieces[i][j].getPlacement()[0];
+							sortie[2] = pieces[i][j].getPlacement()[1];
 							break;
 						}
 					}
 				}
-				if(sortie !=0)break;
+				if (sortie[0] != 0)
+					break;
 			}
-			if(sortie !=0)break;
+			if (sortie[0] != 0)
+				break;
 		}
 		return sortie;
-		//dessiner le roi mater avec une couleur differente (jaune)
+		// dessiner le roi mater avec une couleur differente (jaune)
 	}
 
-	public int[] getPosRoiAdverse(boolean couleur) {//recupere la position du roi adverse à une piece en temps réel
+	public int[] getPosRoiAdverse(boolean couleur) {// recupere la position du roi adverse à une piece en temps réel
 		int[] sortie = null;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (pieces[i][j] != null && pieces[i][j].couleur != couleur && pieces[i][j] instanceof Roi ) {
+				if (pieces[i][j] != null && pieces[i][j].couleur != couleur && pieces[i][j] instanceof Roi) {
 					sortie = pieces[i][j].placement;
 					break;
 				}
 			}
-			if(sortie != null)break;
+			if (sortie != null)
+				break;
 		}
 		return sortie;
 	}
-	
-	public boolean roiOutOfmoves(boolean couleur) { //verifie si un roi peut encore se deplacer prend sa couleur en parametre
+
+	public boolean roiOutOfmoves(boolean couleur) { // verifie si un roi peut encore se deplacer prend sa couleur en
+													// parametre
 		boolean sortie = false;
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -259,54 +266,57 @@ public class Plateau {
 		}
 		return sortie;
 	}
-	
-	public void echecEtMat() {
-		//**faire une liste de piec pouvant proteger le roi, la remplir et faire teste d'apartenance dans clic case
-		//**condition**
-		//le roi est en echec --> roiEnEchec()
-		//le roi ne peut plus se deplacer  --> roiOutOfMoves()
-		
-		//test
-		if(roiEnEchec() == 1 && roiOutOfmoves(false))
-			System.out.println("roi noir mater");
-		if(roiEnEchec() == 2 && roiOutOfmoves(true))
-			System.out.println("roi blanc mater");
+
+	public int echecEtMat() {
+		// **faire une liste de piec pouvant proteger le roi, la remplir et faire teste
+		// d'apartenance dans clic case
+		// **condition**
+		// le roi est en echec --> roiEnEchec()
+		// le roi ne peut plus se deplacer --> roiOutOfMoves()
+
+		// test
+		if (roiEnEchec()[0] == 1 && roiOutOfmoves(false))
+			return 1;
+		if (roiEnEchec()[0] == 2 && roiOutOfmoves(true))
+			return 2;
+		return 0;
 	}
-	
+
 	public void roque() {
-		//**dessiner cet  case avec une couleur differente pour la repérer (violet)
-		//**condition**
-		//le roi n'est pas en echec --> roiEnEchec()
-		//le roi n'a pas bouger
-		//la tour n'a pas bouger
-		//le roi n'est pas en echec
-		//l'espace entre la tour et le roi est vide
-		//l'espace entre le roi et la tour n'est pas prenable par l'adversaire
-		
+		// **dessiner cet case avec une couleur differente pour la repérer (violet)
+		// **condition**
+		// le roi n'est pas en echec --> roiEnEchec()
+		// le roi n'a pas bouger
+		// la tour n'a pas bouger
+		// le roi n'est pas en echec
+		// l'espace entre la tour et le roi est vide
+		// l'espace entre le roi et la tour n'est pas prenable par l'adversaire
+
 	}
-	
-	//methode à completer
-	public boolean peutBouger(int x, int y, boolean tour) { //rempli la liste des pieces autorisée à bougé et verifie si la piece en parametre fais partie de cette liste  
+
+	// methode à completer
+	public boolean peutBouger(int x, int y, boolean tour) { // rempli la liste des pieces autorisée à bougé et verifie
+															// si la piece en parametre fais partie de cette liste
 		LinkedList<int[]> piecesPouvantBouger = new LinkedList<int[]>();
-		if(pieces[x][y].couleur != tour) // si c'est pas ton tour de jeu tu peux pas bouger
+		if (pieces[x][y].couleur != tour) // si c'est pas ton tour de jeu tu peux pas bouger
 			return false;
-		
+
 		// une piece doit protéger son roi
-		if((roiEnEchec() == 1 && tour == false) || ((roiEnEchec() == 2 && tour == true)))  {
-			//si c'est ton tour mais ton roi est en echec
+		if ((roiEnEchec()[0] == 1 && tour == false) || ((roiEnEchec()[0] == 2 && tour == true))) {
+			// si c'est ton tour mais ton roi est en echec
 			piecesPouvantBouger.add(getPosRoiAdverse(!tour));
-			//verdict pour la position en parametre
+			// verdict pour la position en parametre
 			return contientPos(piecesPouvantBouger, x, y);
 		}
-		
+
 		// si on arrive à ce point alors toutes les pieces peuvent bouger
 		return true;
 	}
-	
+
 	public boolean contientPos(LinkedList<int[]> liste, int x, int y) {
 		boolean sortie = false;
-		for(int[] pos : liste) {
-			if(pos[0] == x && pos[1] == y)
+		for (int[] pos : liste) {
+			if (pos[0] == x && pos[1] == y)
 				return true;
 		}
 		return sortie;

@@ -68,6 +68,10 @@ public class Selection extends JFrame implements ActionListener{
 	//le jeu
 	private Jeu j;
 	
+	//gestion des fin de partie avec un retour au menu de selection
+	private static boolean rappelSelection = false;
+	private Timer check;
+	
 	
 	//constructeur
 	public Selection () {
@@ -76,6 +80,7 @@ public class Selection extends JFrame implements ActionListener{
 		this.setLocation(300,200);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		check = new Timer(3000, this); // on regarde toutes les 3 secondes si il faut revenir au menu de sélection
 		
 		cadre1 = new JPanel();
 		//cadre1.setOpaque(false);
@@ -222,6 +227,7 @@ public class Selection extends JFrame implements ActionListener{
 		
 		this.add(menu1);
 		this.add(menu2);
+		check.start();
 		this.setVisible(true);
 	}
 
@@ -308,8 +314,13 @@ public class Selection extends JFrame implements ActionListener{
 			j = new Jeu(nom1, nom2, temps*30, commencer);
 			menu2.setVisible(false);
 			j.setVisible(true);
-		}	
+		}
 		
+		if(e.getSource() == check) {
+			if(rappelSelection) {
+				menu2.setVisible(true);
+			}
+		}
 	}
 
 
@@ -322,5 +333,7 @@ public class Selection extends JFrame implements ActionListener{
 		return nom2;
 	}
 
-
+	public static void setRappel(boolean b) {
+		rappelSelection = b;
+	}
 }
