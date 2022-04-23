@@ -62,7 +62,7 @@ public class ConnectionBD {
         }
     }
     
-    public int ajouterInfos (Joueur joueur) {
+   public int ajouterInfos (Joueur joueur) {
     	
     	try {
 	    	this.insertQuery.setString(1, joueur.identifiant);

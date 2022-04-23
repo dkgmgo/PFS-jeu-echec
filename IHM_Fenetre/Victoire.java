@@ -27,6 +27,7 @@ public class Victoire extends JFrame implements ActionListener {
 		// initialisation du panneau
 		panneauPrincipal = new JPanel();
 		panneauPrincipal.setLayout(null);
+		panneauPrincipal.setBackground(Color.white);
 		this.setContentPane(panneauPrincipal);
 
 		// initialisation de l'image

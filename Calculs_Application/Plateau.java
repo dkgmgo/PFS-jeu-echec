@@ -253,7 +253,7 @@ public class Plateau {
 		return sortie;
 	}
 
-	public boolean roiOutOfmoves(boolean couleur) { // verifie si un roi peut encore se deplacer prend sa couleur en
+	public boolean roiOutOfMoves(boolean couleur) { // verifie si un roi peut encore se deplacer prend sa couleur en
 													// parametre
 		boolean sortie = false;
 		for (int i = 0; i < 8; i++) {
@@ -266,6 +266,16 @@ public class Plateau {
 		}
 		return sortie;
 	}
+	
+	public boolean outOfMoves(boolean couleur) { //verifie si le joueur de la couleur en parametre peut encore bouger une piece
+		for(int i=0; i<8; i++) {
+			for(int j = 0; j<8; j++) {
+				if(pieces[i][j] != null && pieces[i][j].couleur == couleur && !pieces[i][j].deplacement(this).isEmpty())
+					return false;
+			}
+		}
+		return true;
+	}
 
 	public int echecEtMat() {
 		// **faire une liste de piec pouvant proteger le roi, la remplir et faire teste
@@ -275,11 +285,27 @@ public class Plateau {
 		// le roi ne peut plus se deplacer --> roiOutOfMoves()
 
 		// test
-		if (roiEnEchec()[0] == 1 && roiOutOfmoves(false))
+		if (roiEnEchec()[0] == 1 && roiOutOfMoves(false))
 			return 1;
-		if (roiEnEchec()[0] == 2 && roiOutOfmoves(true))
+		if (roiEnEchec()[0] == 2 && roiOutOfMoves(true))
 			return 2;
 		return 0;
+	}
+	
+	public boolean partieNulle() {
+		//out of moves mais pas en echec
+		//repetition de la meme action 3 fois
+		//manque de matériel
+		//50 déplacements sans toucher au pion au une capture
+		
+		//premier cas
+		if((outOfMoves(false) || outOfMoves(true)) && roiEnEchec()[0] == 0)
+			return true;
+		//deuxieme cas
+		
+		//troisieme cas
+		
+		return false;
 	}
 
 	public void roque() {

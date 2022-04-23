@@ -5,6 +5,6 @@ public class MainEchecs {
 
 	public static void main(String[] args) {
 		Selection s1 = new Selection ();
-		//Victoire v1 = new Victoire(1);
+		//Victoire v1 = new Victoire(0);
 	}
 }

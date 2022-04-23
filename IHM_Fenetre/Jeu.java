@@ -177,6 +177,10 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 			finDePartie = new Victoire(1);
 			this.setVisible(false);
 		}
+		else if(plateauDeJeu.partieNulle()) {
+			finDePartie = new Victoire(0);
+			this.setVisible(false);
+		}
 	}
 
 	@Override
