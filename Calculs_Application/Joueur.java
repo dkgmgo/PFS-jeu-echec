@@ -1,55 +1,52 @@
 package Calculs_Application;
 
-import java.awt.Color;
-import java.util.LinkedList;
-
 public class Joueur {
-	protected String identifiant;
-	protected String mdp;
-	protected double score;
+	private String identifiant;
+	private String mdp;
+	private int score;
 	protected boolean couleur;
-	//public int tempsRestant;
+	// public int tempsRestant;
 	protected int[] piecesCapturees = new int[5];
 
-	public Joueur(String id, String mdp, double s, boolean b) {
-		this.identifiant = id;
+	public Joueur(String id, String mdp, int s, boolean b) {
+		identifiant = id;
 		this.mdp = mdp;
-		this.score = s;
+		score = s;
 		this.couleur = b; // couleur est un boolean qui vaut true si la couleur est noire et
-													// false sinon
-		for(int i =0;i<5; i++) {
-			piecesCapturees[i] =0;
+							// false sinon
+		for (int i = 0; i < 5; i++) {
+			piecesCapturees[i] = 0;
 		}
 	}
 
 	public void capture(Piece p) {
-		if(p instanceof Pion)
+		if (p instanceof Pion)
 			piecesCapturees[0]++;
-		else if(p instanceof Cavalier)
+		else if (p instanceof Cavalier)
 			piecesCapturees[1]++;
-		else if(p instanceof Fou)
+		else if (p instanceof Fou)
 			piecesCapturees[2]++;
-		else if(p instanceof Tour)
+		else if (p instanceof Tour)
 			piecesCapturees[3]++;
-		else if(p instanceof Reine)
+		else if (p instanceof Reine)
 			piecesCapturees[4]++;
 	}
 
 	// chaque pièce rapporte un certain nombre de points, on calcule le score avec
 	// toutes les pièces capturees
-	public double calculScore() {
-		int sortie  = 0;
-		for(int i =0; i<5; i++) {
+	public int calculScore() {
+		int sortie = 0;
+		for (int i = 0; i < 5; i++) {
 			int valeur = 0;
-			if(i == 0)
+			if (i == 0)
 				valeur = 1;
-			else if(i == 1)
+			else if (i == 1)
 				valeur = 3;
-			else if(i == 2)
+			else if (i == 2)
 				valeur = 3;
-			else if(i == 3)
+			else if (i == 3)
 				valeur = 5;
-			else if(i == 4)
+			else if (i == 4)
 				valeur = 9;
 			sortie += piecesCapturees[i] * valeur;
 		}
@@ -58,5 +55,21 @@ public class Joueur {
 
 	public int[] getPiecesCapturees() {
 		return piecesCapturees;
+	}
+
+	public String getIdentifiant() {
+		return identifiant;
+	}
+
+	public String getMdp() {
+		return mdp;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 }

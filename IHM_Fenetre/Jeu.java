@@ -1,18 +1,22 @@
 package IHM_Fenetre;
 
-import Calculs_Application.Joueur;
-import Calculs_Application.MonSuperBouton;
-import Calculs_Application.Piece;
-import Calculs_Application.Plateau;
-import java.util.LinkedList;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-import java.awt.event.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import BD.ConnectionBD;
+import Calculs_Application.Plateau;
 
 public class Jeu extends JFrame implements ActionListener, MouseListener {
 	private Plateau plateauDeJeu;
-	private Dessin dessins;
 	private final int TAILLE_FENETRE = 700;
 	private JPanel panneauPrincipal;
 	private JPanel echiquier;
@@ -33,27 +37,34 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 	private int tempsEnSec = 0;
 	public boolean tour;
 	private Victoire finDePartie;
-	
 
 	// Constructeur
-	public Jeu(String nom1, String nom2, int t, int c) {
+	public Jeu(String nom1, String mdp1, String nom2, String mdp2, int t, int c, ConnectionBD connection) {
 		this.setTitle("Jeu d'Echec");
 		this.setSize(TAILLE_FENETRE, TAILLE_FENETRE);
 		this.setLocation(300, 50);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//le temps
 		affichage = new Timer(100, this);
 		gestionTemps = new Timer(1000, this);
 		tempsEnSec = t;
-		if(c == 1)
+		if (c == 1)
 			tour = false;
 		else if (c == -1 || c == 0)
 			tour = true;
 
 		// initialisation du plateau
-		plateauDeJeu = new Plateau();
+		plateauDeJeu = new Plateau(nom1, mdp1, nom2, mdp2);
+		
+		//ajout des nouveaux joueurs
+		connection.ajouterInfos(plateauDeJeu.j1);
+		connection.ajouterInfos(plateauDeJeu.j2);
+		
 
 		// les panneaux
+		
 		// principal
 		panneauPrincipal = new JPanel();
 		panneauPrincipal.setLayout(null);
@@ -80,14 +91,14 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		gauche = new JPanel();
 		gauche.setLayout(null);
 		gauche.setBackground(null);
-		gauche.setBounds(0, 0, (TAILLE_FENETRE-480)/2, TAILLE_FENETRE);
-		
+		gauche.setBounds(0, 0, (TAILLE_FENETRE - 480) / 2, TAILLE_FENETRE);
+
 		// droite
 		droite = new JPanel();
 		droite.setLayout(null);
 		droite.setBackground(null);
-		droite.setBounds(590, 0, (TAILLE_FENETRE-480)/2, TAILLE_FENETRE);
-		
+		droite.setBounds(590, 0, (TAILLE_FENETRE - 480) / 2, TAILLE_FENETRE);
+
 		// joueurs ce code peut etre simplifié avec de smethodes static dans dessin
 		pseudo1 = new JLabel(nom1);
 		pseudo1.setBounds(0, 85, 100, 20);
@@ -128,34 +139,34 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		affichage.start();
 		gestionTemps.start();
 	}
- 
+
 	public Plateau getPlateauDeJeu() {
 		return plateauDeJeu;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
-		if (e.getSource()==time1) {
+
+		if (e.getSource() == time1) {
 			tour = true;
 		}
-		if (e.getSource()==time2) {
+		if (e.getSource() == time2) {
 			tour = false;
 		}
-		
-		if(e.getSource() == gestionTemps) {
-			if(!tour) 
+
+		if (e.getSource() == gestionTemps) {
+			if (!tour)
 				cptTops1++;
 			else
 				cptTops2++;
 		}
-		
+
 		if (e.getSource() == affichage) {
 			Dessin.redessinerPieces(plateauDeJeu, echiquier, this, tour);
 			Dessin.majPiecesCapturees(plateauDeJeu);
 			afficherTemps();
-			//plateauDeJeu.echecEtMat();
+			// plateauDeJeu.echecEtMat();
 		}
-			
+
 	}
 
 	@Override
@@ -169,15 +180,13 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		int y = echiquier.getMousePosition().y;
 		plateauDeJeu.clicCase(x, y, tour);
 		echiquier.repaint();
-		if(plateauDeJeu.echecEtMat() == 1) {
+		if (plateauDeJeu.echecEtMat() == 1) {
 			finDePartie = new Victoire(2);
 			this.setVisible(false);
-		}
-		else if(plateauDeJeu.echecEtMat() == 2) {
+		} else if (plateauDeJeu.echecEtMat() == 2) {
 			finDePartie = new Victoire(1);
 			this.setVisible(false);
-		}
-		else if(plateauDeJeu.partieNulle()) {
+		} else if (plateauDeJeu.partieNulle()) {
 			finDePartie = new Victoire(0);
 			this.setVisible(false);
 		}
@@ -200,12 +209,12 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public void afficherTemps() {
 		int t1 = tempsEnSec - cptTops1;
 		int t2 = tempsEnSec - cptTops2;
-		String s1 = "Temps Restant : "+Dessin.secToMinSec(t1);
-		String s2 = "Temps Restant : "+Dessin.secToMinSec(t2);
+		String s1 = "Temps Restant : " + Dessin.secToMinSec(t1);
+		String s2 = "Temps Restant : " + Dessin.secToMinSec(t2);
 		temps1.setText(s1);
 		temps2.setText(s2);
 	}

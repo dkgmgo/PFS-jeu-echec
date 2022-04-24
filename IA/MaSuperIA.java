@@ -8,7 +8,7 @@ public class MaSuperIA extends Joueur{
 	private Plateau plateau;
 	
 	public MaSuperIA(Plateau p, boolean c) {
-		super("IA/Bot", "", 0.0, c);
+		super("IA/Bot", "", 0, c);
 		this.plateau = p;
 		//attribution des valeurs des pieces selon la couleur
 		//positif pour les noirs, négatif pour les blancs

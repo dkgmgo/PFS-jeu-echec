@@ -13,7 +13,7 @@ public class Plateau {
 	private int ligne = 0, colonne = 0;
 	public Joueur j1;
 	public Joueur j2;
-	public boolean gameWithAI = false;
+	public static boolean gameWithAI = false;
 
 	/*
 	 * ici on va fonctionner avec 2 constructeurs, un pour les tests et un réel
@@ -23,17 +23,19 @@ public class Plateau {
 	// test
 
 	/*
-	 * public Plateau() { pieces[2][2] = new Fou(false, new int[] { 2, 2 });
-	 * pieces[4][2] = new Cavalier(false, new int[] { 4, 2 }); pieces[4][4] = new
-	 * Tour(true, new int[] { 4, 4 }); pieces[1][3] = new Pion(true, new int[] { 1,
-	 * 3 }); pieces[5][2] = new Reine(true, new int[] { 5, 2 }); pieces[4][3] = new
-	 * Roi(false, new int[] { 4, 3 }); caseSelectionnee[0] = -1; caseSelectionnee[1]
-	 * = -1; j1 = new Joueur("nom1", "mdp1", 0, true); j2 = new Joueur("nom2",
-	 * "mdp2", 0, false); }
+	 * public Plateau(String nom1, String mdp1, String nom2, String mdp2) {
+	 * pieces[2][2] = new Fou(false, new int[] { 2, 2 }); pieces[4][2] = new
+	 * Cavalier(false, new int[] { 4, 2 }); pieces[4][4] = new Tour(true, new int[]
+	 * { 4, 4 }); pieces[1][3] = new Pion(true, new int[] { 1, 3 }); pieces[5][2] =
+	 * new Reine(true, new int[] { 5, 2 }); pieces[4][3] = new Roi(false, new int[]
+	 * { 4, 3 }); caseSelectionnee[0] = -1; caseSelectionnee[1] = -1; if
+	 * (!gameWithAI) { j1 = new Joueur(nom1, mdp1, 0, true); j2 = new Joueur(nom2,
+	 * mdp2, 0, false); } else { j1 = new MaSuperIA(this, true); j2 = new
+	 * Joueur(nom2, mdp2, 0, true); } }
 	 */
 
 	// réel
-	public Plateau() {// tester grande boucle //pions
+	public Plateau(String nom1, String mdp1, String nom2, String mdp2) {// tester grande boucle //pions
 		for (int i = 0; i < 8; i++) {
 			pieces[i][1] = new Pion(false, new int[] { i, 1 });
 			pieces[i][6] = new Pion(true, new int[] { i, 6 }); // rois et reines
@@ -62,11 +64,14 @@ public class Plateau {
 		caseSelectionnee[0] = -1;
 		caseSelectionnee[1] = -1;
 
-		if (!gameWithAI)
-			j1 = new Joueur("nom1", "mdp1", 0, true);
-		else
+		if (!gameWithAI) {
+			j1 = new Joueur(nom1, mdp1, 0, true);
+			j2 = new Joueur(nom2, mdp2, 0, false);
+		} else {
 			j1 = new MaSuperIA(this, true);
-		j2 = new Joueur("nom2", "mdp2", 0, false);
+			j2 = new Joueur(nom2, mdp2, 0, false);
+		}
+
 	}
 
 	public void clicCaseClavier() {
@@ -266,11 +271,13 @@ public class Plateau {
 		}
 		return sortie;
 	}
-	
-	public boolean outOfMoves(boolean couleur) { //verifie si le joueur de la couleur en parametre peut encore bouger une piece
-		for(int i=0; i<8; i++) {
-			for(int j = 0; j<8; j++) {
-				if(pieces[i][j] != null && pieces[i][j].couleur == couleur && !pieces[i][j].deplacement(this).isEmpty())
+
+	public boolean outOfMoves(boolean couleur) { // verifie si le joueur de la couleur en parametre peut encore bouger
+													// une piece
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (pieces[i][j] != null && pieces[i][j].couleur == couleur
+						&& !pieces[i][j].deplacement(this).isEmpty())
 					return false;
 			}
 		}
@@ -291,20 +298,20 @@ public class Plateau {
 			return 2;
 		return 0;
 	}
-	
+
 	public boolean partieNulle() {
-		//out of moves mais pas en echec
-		//repetition de la meme action 3 fois
-		//manque de matériel
-		//50 déplacements sans toucher au pion au une capture
-		
-		//premier cas
-		if((outOfMoves(false) || outOfMoves(true)) && roiEnEchec()[0] == 0)
+		// out of moves mais pas en echec
+		// repetition de la meme action 3 fois
+		// manque de matériel
+		// 50 déplacements sans toucher au pion au une capture
+
+		// premier cas
+		if ((outOfMoves(false) || outOfMoves(true)) && roiEnEchec()[0] == 0)
 			return true;
-		//deuxieme cas
-		
-		//troisieme cas
-		
+		// deuxieme cas
+
+		// troisieme cas
+
 		return false;
 	}
 
@@ -346,5 +353,9 @@ public class Plateau {
 				return true;
 		}
 		return sortie;
+	}
+
+	public static void avecIA() {
+		gameWithAI = true;
 	}
 }
