@@ -12,8 +12,7 @@ public class Joueur {
 		identifiant = id;
 		this.mdp = mdp;
 		score = s;
-		this.couleur = b; // couleur est un boolean qui vaut true si la couleur est noire et
-							// false sinon
+		this.couleur = b;
 		for (int i = 0; i < 5; i++) {
 			piecesCapturees[i] = 0;
 		}
@@ -34,7 +33,7 @@ public class Joueur {
 
 	// chaque pièce rapporte un certain nombre de points, on calcule le score avec
 	// toutes les pièces capturees
-	public int calculScore() {
+	public int calculScore(Joueur adversaire) {
 		int sortie = 0;
 		for (int i = 0; i < 5; i++) {
 			int valeur = 0;
@@ -48,8 +47,9 @@ public class Joueur {
 				valeur = 5;
 			else if (i == 4)
 				valeur = 9;
-			sortie += piecesCapturees[i] * valeur;
+			sortie += adversaire.piecesCapturees[i] * valeur;
 		}
+		sortie = 39 - sortie;
 		return sortie;
 	}
 

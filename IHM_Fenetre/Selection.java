@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -18,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 import BD.ConnectionBD;
+import Calculs_Application.Joueur;
 import Calculs_Application.Plateau;
 
 public class Selection extends JFrame implements ActionListener {
@@ -44,14 +46,14 @@ public class Selection extends JFrame implements ActionListener {
 	private JLabel pseudoInscription;
 	private JLabel mdpInscription;
 	private JTextField choixPseudoInscription;
-	private JTextField choixMdpInscription;
+	private JPasswordField choixMdpInscription;
 
 	// Connexion
 	private JLabel connexion = new JLabel("SE CONNECTER");
 	private JLabel pseudoConnexion;
 	private JLabel mdpConnexion;
 	private JTextField choixPseudoConnexion;
-	private JTextField choixMdpConnexion;
+	private JPasswordField choixMdpConnexion;
 
 	private JButton cestParti = new JButton("C'est parti ! ");
 	private JButton gameWithAI;
@@ -179,13 +181,13 @@ public class Selection extends JFrame implements ActionListener {
 		choixPseudoInscription = new JTextField("");
 		choixPseudoInscription.setBounds(100, 190, 150, 60);
 
-		choixMdpInscription = new JTextField("");
+		choixMdpInscription = new JPasswordField("");
 		choixMdpInscription.setBounds(100, 290, 150, 60);
 
 		choixPseudoConnexion = new JTextField("");
 		choixPseudoConnexion.setBounds(350, 190, 150, 60);
 
-		choixMdpConnexion = new JTextField("");
+		choixMdpConnexion = new JPasswordField("");
 		choixMdpConnexion.setBounds(350, 290, 150, 60);
 
 		choixTemps = new JTextField("");
@@ -267,27 +269,51 @@ public class Selection extends JFrame implements ActionListener {
 			// les utiliser dans les autres fenâˆšâ„¢tres
 
 			if (choixPseudoInscription.getText().isEmpty() && !choixPseudoConnexion.getText().isEmpty()) {
-				nom1 = choixPseudoConnexion.getText();
-				mdp1 = choixMdpConnexion.getText();
-				nomJoueur.setText("Joueur 2, c'est a vous ! ");
-				nomJoueur.setFont(new Font("Serif", Font.BOLD, 20));
-				nomJoueur.setSize(400, 30);
-				nomJoueur.setLocation(90, 10);
-
-				b2 = true;
+				
+				if (choixMdpConnexion.getText().isEmpty() && choixMdpInscription.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(this, "Veuillez choisir un mot de passe");
+				} else {
+					String test= this.connection.onConnait(choixPseudoConnexion.getText());
+					if (test.equals("")) {
+						JOptionPane.showMessageDialog(this, "Vous n'êtes pas inscrit(e)");
+					}
+					if (!test.equals(choixMdpConnexion.getText())) {
+						JOptionPane.showMessageDialog(this, "Mot de passe invalide");
+					} else if (!test.equals("") && test.equals(choixMdpConnexion.getText())) {
+						nom1 = choixPseudoConnexion.getText();
+						mdp1 = choixMdpConnexion.getText();
+						gameWithAI.setVisible(true);
+						nomJoueur.setText("JOUEUR 2, C'EST A VOUS !");
+						nomJoueur.setFont(new Font("Serif", Font.BOLD, 20));
+						nomJoueur.setSize(400, 30);
+						nomJoueur.setLocation(90, 10);
+	
+						b2 = true;
+					}
+				}
+				
 			} else if (choixPseudoConnexion.getText().isEmpty() && !choixPseudoInscription.getText().isEmpty()) {
-				nom1 = choixPseudoInscription.getText();
-				mdp1 = choixMdpInscription.getText();
-				gameWithAI.setVisible(true);
-				nomJoueur.setText("JOUEUR 2, C'EST A VOUS ! ");
-				nomJoueur.setFont(new Font("Arial", Font.BOLD, 20));
-				nomJoueur.setSize(400, 30);
-				nomJoueur.setLocation(90, 30);
-
-				b2 = true;
+				
+				if (choixMdpConnexion.getText().isEmpty() && choixMdpInscription.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(this, "Veuillez choisir un mot de passe");
+				} else {
+				
+					if (connection.ajouterInfos(new Joueur (choixPseudoInscription.getText(), choixMdpInscription.getText(), 0, true))!=-1) {
+						nom1 = choixPseudoInscription.getText();
+						mdp1 = choixMdpInscription.getText();
+						gameWithAI.setVisible(true);
+						nomJoueur.setText("JOUEUR 2, C'EST A VOUS ! ");
+						nomJoueur.setFont(new Font("Arial", Font.BOLD, 20));
+						nomJoueur.setSize(400, 30);
+						nomJoueur.setLocation(90, 30);
+		
+						b2 = true;
+					} else {
+						JOptionPane.showMessageDialog(this, "Ce pseudo n'est pas disponible");
+					}
+				}
 			} else {
-				JOptionPane.showMessageDialog(this, "Veuillez entrer un pseudo");
-				mdp1 = "1";
+					JOptionPane.showMessageDialog(this, "Veuillez choisir un pseudo");
 			}
 
 			choixPseudoInscription.setText("");
@@ -300,19 +326,54 @@ public class Selection extends JFrame implements ActionListener {
 		} else if (e.getSource() == cestParti && b2 == true) {
 
 			if (choixPseudoInscription.getText().isEmpty() && !choixPseudoConnexion.getText().isEmpty()) {
-				nom2 = choixPseudoConnexion.getText();
-				mdp2 = choixMdpConnexion.getText();
-				menu1.setVisible(false);
-				menu2.setVisible(true);
+				
+				if (choixMdpConnexion.getText().isEmpty() && choixMdpInscription.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(this, "Veuillez choisir un mot de passe");
+				} else {
+					String test= this.connection.onConnait(choixPseudoConnexion.getText());
+					if (test.equals("")) {
+						JOptionPane.showMessageDialog(this, "Vous n'êtes pas inscrit(e)");
+
+
+					}
+					if (!test.equals(choixMdpConnexion.getText())) {
+						JOptionPane.showMessageDialog(this, "Mot de passe invalide");
+						
+	
+						
+					} else if (!test.equals("") && test.equals(choixMdpConnexion.getText())) {
+						nom2 = choixPseudoConnexion.getText();
+						mdp2 = choixMdpConnexion.getText();
+						
+						nom2 = choixPseudoConnexion.getText();
+						mdp2 = choixMdpConnexion.getText();
+						menu1.setVisible(false);
+						menu2.setVisible(true);
+	
+					}
+				}
+
 			} else if (choixPseudoConnexion.getText().isEmpty() && !choixPseudoInscription.getText().isEmpty()) {
-				nom2 = choixPseudoInscription.getText();
-				mdp2 = choixMdpInscription.getText();
-				menu1.setVisible(false);
-				menu2.setVisible(true);
-			} else {
-				JOptionPane.showMessageDialog(this, "Veuillez entrer un pseudo");
-				mdp2 = "2";
+				
+				if (choixMdpConnexion.getText().isEmpty() && choixMdpInscription.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(this, "Veuillez choisir un mot de passe");
+				} else {
+					if (connection.ajouterInfos(new Joueur (choixPseudoInscription.getText(), choixMdpInscription.getText(), 0, true))!=-1) {
+						nom2 = choixPseudoInscription.getText();
+						mdp2 = choixMdpInscription.getText();
+						menu1.setVisible(false);
+						menu2.setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(this, "Ce pseudo n'est pas disponible");
+					} 
+				}
 			}
+			
+			choixPseudoInscription.setText("");
+			choixPseudoConnexion.setText("");
+			choixMdpInscription.setText("");
+			choixMdpConnexion.setText("");
+			menu1.repaint();
 
 		}
 

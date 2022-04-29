@@ -65,17 +65,17 @@ public class Plateau {
 		caseSelectionnee[1] = -1;
 
 		if (!gameWithAI) {
-			j1 = new Joueur(nom1, mdp1, 0, true);
-			j2 = new Joueur(nom2, mdp2, 0, false);
+			j1 = new Joueur(nom1, mdp1, 0, false); //joueur 1 est noir (en haut de l'échiquier)
+			j2 = new Joueur(nom2, mdp2, 0, true); //joueur 2 est blanc (en bas de l'échiquier)
 		} else {
-			j1 = new MaSuperIA(this, true);
-			j2 = new Joueur(nom2, mdp2, 0, false);
+			j1 = new MaSuperIA(this, false);
+			j2 = new Joueur(nom2, mdp2, 0, true);
 		}
 
 	}
 
 	public void clicCaseClavier() {
-
+		//à écrire
 	}
 
 	public int[] quelleCase(int abs, int ord) {
@@ -105,7 +105,7 @@ public class Plateau {
 				if (dest[0] == caseSelectionnee[0] && (dest[1] == caseSelectionnee[1])) {
 					bouger();
 				}
-			}
+			} 
 			destinationsValides.clear();
 			caseSelectionnee[0] = -1;
 			caseSelectionnee[1] = -1;
@@ -141,7 +141,7 @@ public class Plateau {
 	public void capturer() {
 		Piece p = pieces[ligne][colonne];
 
-		if (j1.couleur == pieces[caseSelectionnee[0]][caseSelectionnee[1]].couleur) {
+		if (j1.couleur != pieces[caseSelectionnee[0]][caseSelectionnee[1]].couleur) {
 			j2.capture(pieces[caseSelectionnee[0]][caseSelectionnee[1]]);
 		} else {
 			j1.capture(pieces[caseSelectionnee[0]][caseSelectionnee[1]]);

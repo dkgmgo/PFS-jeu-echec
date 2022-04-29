@@ -14,6 +14,7 @@ import javax.swing.Timer;
 
 import BD.ConnectionBD;
 import Calculs_Application.Plateau;
+import IA.MaSuperIA;
 
 public class Jeu extends JFrame implements ActionListener, MouseListener {
 	private Plateau plateauDeJeu;
@@ -30,13 +31,16 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 	private JLabel temps2;
 	public JButton time1;
 	public JButton time2;
+	private JButton finir;
 	private Timer affichage;
 	private Timer gestionTemps;
 	private int cptTops1 = 0;
 	private int cptTops2 = 0;
 	private int tempsEnSec = 0;
+	private double tempsEcoule = 0.0;
 	public boolean tour;
 	private Victoire finDePartie;
+	private ConnectionBD connection;
 
 	// Constructeur
 	public Jeu(String nom1, String mdp1, String nom2, String mdp2, int t, int c, ConnectionBD connection) {
@@ -45,26 +49,27 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		this.setLocation(300, 50);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		//le temps
+
+		// le temps
 		affichage = new Timer(100, this);
 		gestionTemps = new Timer(1000, this);
 		tempsEnSec = t;
-		if (c == 1)
+		if (c == 1 && !plateauDeJeu.gameWithAI)
 			tour = false;
-		else if (c == -1 || c == 0)
+		else if (c == -1 || c == 0 || plateauDeJeu.gameWithAI)
 			tour = true;
 
-		// initialisation du plateau
-		plateauDeJeu = new Plateau(nom1, mdp1, nom2, mdp2);
-		
-		//ajout des nouveaux joueurs
+		// initialisation du plateau avec la création des objets joueurs (voir
+		// constructeur de plateau)
+		plateauDeJeu = new Plateau(nom2, mdp2, nom1, mdp1);
+
+		// ajout des nouveaux joueurs à la base
+		this.connection = connection;
 		connection.ajouterInfos(plateauDeJeu.j1);
 		connection.ajouterInfos(plateauDeJeu.j2);
-		
 
 		// les panneaux
-		
+
 		// principal
 		panneauPrincipal = new JPanel();
 		panneauPrincipal.setLayout(null);
@@ -126,6 +131,12 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		time2.addActionListener(this);
 		bas.add(time2);
 
+		finir = new JButton("Finir la partie");
+		finir.setBounds(300, 40, 120, 30);
+		finir.setBackground(new Color(172, 255, 255));
+		finir.addActionListener(this);
+		bas.add(finir);
+
 		// initialisations venant de dessin
 		Dessin.dessinnerPieces(plateauDeJeu, echiquier, this);
 		Dessin.initPiecesCapturees(plateauDeJeu, gauche, droite);
@@ -151,6 +162,12 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		}
 		if (e.getSource() == time2) {
 			tour = false;
+			//quand l'adversaire a jouer contre l'IA
+			if(plateauDeJeu.gameWithAI) {
+				MaSuperIA ia = (MaSuperIA)plateauDeJeu.j1;
+				ia.jouer(tour);
+				tour = true;
+			}
 		}
 
 		if (e.getSource() == gestionTemps) {
@@ -158,13 +175,25 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 				cptTops1++;
 			else
 				cptTops2++;
+			// fin de partie au temps
+			if (cptTops1 == tempsEnSec / 2) {
+				finDePartie = new Victoire(2, plateauDeJeu, connection, tempsEcoule);
+				this.setVisible(false);
+			} else if (cptTops2 == tempsEnSec / 2) {
+				finDePartie = new Victoire(1, plateauDeJeu, connection, tempsEcoule);
+				this.setVisible(false);
+			}
 		}
 
 		if (e.getSource() == affichage) {
 			Dessin.redessinerPieces(plateauDeJeu, echiquier, this, tour);
 			Dessin.majPiecesCapturees(plateauDeJeu);
 			afficherTemps();
-			// plateauDeJeu.echecEtMat();
+		}
+
+		if (e.getSource() == finir) {
+			finDePartie = new Victoire(0, plateauDeJeu, connection, tempsEcoule);
+			this.setVisible(false);
 		}
 
 	}
@@ -181,13 +210,13 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		plateauDeJeu.clicCase(x, y, tour);
 		echiquier.repaint();
 		if (plateauDeJeu.echecEtMat() == 1) {
-			finDePartie = new Victoire(2);
+			finDePartie = new Victoire(2, plateauDeJeu, connection, tempsEcoule);
 			this.setVisible(false);
 		} else if (plateauDeJeu.echecEtMat() == 2) {
-			finDePartie = new Victoire(1);
+			finDePartie = new Victoire(1, plateauDeJeu, connection, tempsEcoule);
 			this.setVisible(false);
 		} else if (plateauDeJeu.partieNulle()) {
-			finDePartie = new Victoire(0);
+			finDePartie = new Victoire(0, plateauDeJeu, connection, tempsEcoule);
 			this.setVisible(false);
 		}
 	}
@@ -217,5 +246,6 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		String s2 = "Temps Restant : " + Dessin.secToMinSec(t2);
 		temps1.setText(s1);
 		temps2.setText(s2);
+		tempsEcoule = (cptTops1 + cptTops2) / 60.0;
 	}
 }
