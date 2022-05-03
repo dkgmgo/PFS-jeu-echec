@@ -1,9 +1,9 @@
-##########PFS-jeu-echec#############
-projet de fin de semestre jeu d'échecs
+## ###PFS-jeu-echec###
+# projet de fin de semestre jeu d'échecs
 
 
 
-# on a 4 packages differents:
+# 4 packages differents:
 
 
 * package Calcul_Application: - Plateau.java classe la plus importante, contient toutes les méthodes de jeu
@@ -22,14 +22,14 @@ projet de fin de semestre jeu d'échecs
 * package IA: - MaSuperIA.java objet représentant l'IA et ses propriétés (incomplet)
 
 
-# on a  2 dossiers "images" contenus dans les packages contenant les images utilisées dans la programmation
+# 2 dossiers "images" contenus dans les packages contenant les images utilisées dans la programmation
 
 
 
-#on a un CR contenant l'UML, le Semainier et quelques explications
+# un CR contenant l'UML, le Semainier et quelques explications
 
 
 
-#enfin on a un README
+# un README
 
 
