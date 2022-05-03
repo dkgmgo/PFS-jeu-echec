@@ -50,7 +50,7 @@ public class MaSuperIA extends Joueur {
 			y = mesPieces.get(i).getPlacement()[1] * 60;
 		}while((plateau.getPieces()[x / 60][y / 60].deplacement(plateau).isEmpty()));
 		plateau.clicCase(x, y, tour);
-		System.out.println("ok" + x + " " + y);
+		//System.out.println("ok" + x + " " + y);
 		LinkedList<int[]> liste = plateau.getPieces()[x / 60][y / 60].deplacement(plateau);
 		n = liste.size();
 		i = (int) (Math.random() * (n-1));

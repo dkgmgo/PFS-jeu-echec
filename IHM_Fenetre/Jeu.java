@@ -162,10 +162,11 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 		}
 		if (e.getSource() == time2) {
 			tour = false;
-			//quand l'adversaire a jouer contre l'IA
-			if(plateauDeJeu.gameWithAI) {
-				MaSuperIA ia = (MaSuperIA)plateauDeJeu.j1;
+			// quand l'adversaire a jouer contre l'IA
+			if (plateauDeJeu.gameWithAI) {
+				MaSuperIA ia = (MaSuperIA) plateauDeJeu.j1;
 				ia.jouer(tour);
+				echiquier.repaint();
 				tour = true;
 			}
 		}
@@ -176,10 +177,10 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 			else
 				cptTops2++;
 			// fin de partie au temps
-			if (cptTops1 == tempsEnSec / 2) {
+			if (cptTops1 == tempsEnSec) {
 				finDePartie = new Victoire(2, plateauDeJeu, connection, tempsEcoule);
 				this.setVisible(false);
-			} else if (cptTops2 == tempsEnSec / 2) {
+			} else if (cptTops2 == tempsEnSec) {
 				finDePartie = new Victoire(1, plateauDeJeu, connection, tempsEcoule);
 				this.setVisible(false);
 			}
@@ -205,20 +206,25 @@ public class Jeu extends JFrame implements ActionListener, MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int x = echiquier.getMousePosition().x;
-		int y = echiquier.getMousePosition().y;
-		plateauDeJeu.clicCase(x, y, tour);
-		echiquier.repaint();
-		if (plateauDeJeu.echecEtMat() == 1) {
-			finDePartie = new Victoire(2, plateauDeJeu, connection, tempsEcoule);
-			this.setVisible(false);
-		} else if (plateauDeJeu.echecEtMat() == 2) {
-			finDePartie = new Victoire(1, plateauDeJeu, connection, tempsEcoule);
-			this.setVisible(false);
-		} else if (plateauDeJeu.partieNulle()) {
-			finDePartie = new Victoire(0, plateauDeJeu, connection, tempsEcoule);
-			this.setVisible(false);
+		try {
+			int x = echiquier.getMousePosition().x;
+			int y = echiquier.getMousePosition().y;
+			plateauDeJeu.clicCase(x, y, tour);
+			echiquier.repaint();
+			if (plateauDeJeu.echecEtMat() == 1) {
+				finDePartie = new Victoire(2, plateauDeJeu, connection, tempsEcoule);
+				this.setVisible(false);
+			} else if (plateauDeJeu.echecEtMat() == 2) {
+				finDePartie = new Victoire(1, plateauDeJeu, connection, tempsEcoule);
+				this.setVisible(false);
+			} else if (plateauDeJeu.partieNulle()) {
+				finDePartie = new Victoire(0, plateauDeJeu, connection, tempsEcoule);
+				this.setVisible(false);
+			}
+		} catch (NullPointerException npe) {
+			// System.out.println("la fenetre de jeu n'est plus visible");
 		}
+		
 	}
 
 	@Override

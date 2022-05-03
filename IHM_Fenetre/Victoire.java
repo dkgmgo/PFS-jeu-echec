@@ -61,8 +61,8 @@ public class Victoire extends JFrame implements ActionListener {
 		panneauPrincipal.add(affiche);
 		panneauPrincipal.add(menu);
 		this.setVisible(true);
-		
-		//les joueurs et la maj du score
+
+		// les joueurs et la maj du score
 		j1 = plateauDeJeu.j1;
 		j2 = plateauDeJeu.j2;
 		this.conn = conn;
@@ -77,15 +77,13 @@ public class Victoire extends JFrame implements ActionListener {
 	}
 
 	public void maj() {
-		if(gagnant == 2) {
+		if (gagnant == 2) {
 			conn.majScore(j1.getIdentifiant(), j1.calculScore(j2), temps);
 			conn.majScore(j2.getIdentifiant(), j1.calculScore(j2) * -1, temps);
-		}
-		else if(gagnant == 1) {
+		} else if (gagnant == 1) {
 			conn.majScore(j2.getIdentifiant(), j2.calculScore(j1), temps);
 			conn.majScore(j1.getIdentifiant(), j2.calculScore(j1) * -1, temps);
-		}
-		else {
+		} else {
 			conn.majScore(j1.getIdentifiant(), 0, temps);
 			conn.majScore(j2.getIdentifiant(), 0, temps);
 		}
